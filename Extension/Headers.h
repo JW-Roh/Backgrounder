@@ -178,7 +178,7 @@ typedef struct {
 - (BOOL)deactivationSetting:(unsigned)setting;
 - (BOOL)displaySetting:(unsigned)setting;
 - (void)setDeactivationSetting:(unsigned)setting flag:(BOOL)flag;
-- (void)kill;																// by deVbug
+- (void)kill;                                                                // by deVbug
 @end
 @interface SBApplication : SBDisplay
 - (void)_cancelAutoRelaunch;
