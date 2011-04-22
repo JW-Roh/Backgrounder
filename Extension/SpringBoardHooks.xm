@@ -320,12 +320,12 @@ static void setBackgroundingEnabled(SBApplication *app, BOOL enable)
     if (pid > 0)
         // FIXME: If the target application does not have the Backgrounder
         //        hooks enabled, this will cause it to exit abnormally
-        kill(pid, SIGUSR1);
+		kill(pid, SIGUSR1);
 
     // Store the new backgrounding status of the application
     if (enable)
-        [enabledApps_ addObject:identifier];
-    else
+	    [enabledApps_ addObject:identifier];
+	else
         [enabledApps_ removeObject:identifier];
 
     // Update badge (if necessary)
@@ -445,7 +445,7 @@ static BOOL shouldSuspend_ = NO;
     NSString *identifier = [app displayIdentifier];
     if (app && integerForKey(kBackgroundingMethod, identifier) != BGBackgroundingMethodOff) {
         BOOL isEnabled = [enabledApps_ containsObject:identifier];
-        [self setBackgroundingEnabled:(!isEnabled) forDisplayIdentifier:identifier];
+		[self setBackgroundingEnabled:(!isEnabled) forDisplayIdentifier:identifier];
 
         // Create a simple popup message
         NSString *status = [NSString stringWithFormat:@"Backgrounding %s", (isEnabled ? "Disabled" : "Enabled")];
@@ -465,7 +465,13 @@ static BOOL shouldSuspend_ = NO;
         else
             // NOTE: Only used when invocation method is MenuHoldShort or LockHoldShort
             shouldSuspend_ = YES;
-    }
+		
+		// by deVbug
+		if (integerForKey(kBackgroundingMethod, identifier) != BGBackgroundingMethodBackgrounder) {
+			if (isEnabled && !autoSuspend)
+				[app performSelector:@selector(kill) withObject:nil afterDelay:1.0f];
+		}
+	}
 }
 
 %new(v@:)
@@ -517,7 +523,7 @@ static BOOL shouldSuspend_ = NO;
             // Application is current app
             // NOTE: Must set animation flag for deactivation, otherwise
             //       application window does not disappear (reason yet unknown)
-            [app setDeactivationSetting:0x2 flag:YES]; // animate
+			[app setDeactivationSetting:0x2 flag:YES]; // animate
 
             // Remove from active display stack
             [SBWActiveDisplayStack popDisplay:app];
