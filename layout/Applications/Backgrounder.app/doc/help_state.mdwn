@@ -9,6 +9,17 @@
 
 - - -
 
+> # Native only
+> ## (Default: Off)
+> - - -
+> * **Off:**  
+>   Native multitasking apps and other apps also will start with backgrounding enabled/disabled.
+>
+> * **On:**  
+>   Only native multitasking apps will start with backgrounding enabled/disabled.
+
+- - -
+
 > # Stay Enabled
 > ## (Default: On)
 > - - -
@@ -19,3 +30,14 @@
 >
 > * **On:**  
 >   Once enabled, backgrounding will remain enabled until the user manually disables it - no matter how many times the app is minimized and restored.
+
+- - -
+
+> # Native only
+> ## (Default: Off)
+> - - -
+> * **Off:**  
+>   Native multitasking apps and other apps also stay enabled/disabled.
+>
+> * **On:**  
+>   Only native multitasking apps stay enabled/disabled.

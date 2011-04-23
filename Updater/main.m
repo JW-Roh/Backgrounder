@@ -84,6 +84,8 @@ int main(int argc, char **argv)
             BOOL badgeEnabled = NO;
             BOOL badgeEnabledForAll = YES;
             BOOL persistent = YES;
+            BOOL persistentNativeOnly = NO;
+            BOOL enableAtLaunchNativeOnly = NO;
 
             NSArray *blacklistedApps = nil;
             NSArray *enabledApps = nil;
@@ -100,6 +102,14 @@ int main(int argc, char **argv)
             value = [prefs objectForKey:kPersistent];
             if (value != nil && [value isKindOfClass:[NSNumber class]])
                 persistent = [value boolValue];
+            
+            value = [prefs objectForKey:kPersistentNativeOnly];
+            if (value != nil && [value isKindOfClass:[NSNumber class]])
+                persistentNativeOnly = [value boolValue];
+            
+            value = [prefs objectForKey:kEnableAtLaunchNativeOnly];
+            if (value != nil && [value isKindOfClass:[NSNumber class]])
+                enableAtLaunchNativeOnly = [value boolValue];
 
             value = [prefs objectForKey:kBlacklistedApps];
             if (value != nil && [value isKindOfClass:[NSArray class]])
@@ -113,7 +123,9 @@ int main(int argc, char **argv)
             NSDictionary *global = [NSDictionary dictionaryWithObjectsAndKeys:
                 [NSNumber numberWithInteger:BGBackgroundingMethodBackgrounder], kBackgroundingMethod,
                 [NSNumber numberWithBool:NO], kEnableAtLaunch,
+                [NSNumber numberWithBool:enableAtLaunchNativeOnly], kEnableAtLaunchNativeOnly,
                 [NSNumber numberWithBool:persistent], kPersistent,
+                [NSNumber numberWithBool:persistentNativeOnly], kPersistentNativeOnly,
                 [NSNumber numberWithBool:badgeEnabled], kBadgeEnabled,
                 [NSNumber numberWithBool:NO], kStatusBarIconEnabled,
                 [NSNumber numberWithBool:YES], kFallbackToNative,
@@ -205,6 +217,7 @@ int main(int argc, char **argv)
             if ([value intValue] == BGBackgroundingMethodNative) {
                 [global setObject:[NSNumber numberWithBool:YES] forKey:kEnableAtLaunch];
                 [global setObject:[NSNumber numberWithBool:YES] forKey:kPersistent];
+                [global setObject:[NSNumber numberWithBool:NO] forKey:kPersistentNativeOnly];
             }
         }
  
@@ -217,6 +230,7 @@ int main(int argc, char **argv)
                 if ([value intValue] == BGBackgroundingMethodNative) {
                     [dict setObject:[NSNumber numberWithBool:YES] forKey:kEnableAtLaunch];
                     [dict setObject:[NSNumber numberWithBool:YES] forKey:kPersistent];
+                    [dict setObject:[NSNumber numberWithBool:NO] forKey:kPersistentNativeOnly];
 
                     [overrides setObject:dict forKey:displayId];
                 }

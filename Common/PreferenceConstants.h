@@ -68,6 +68,10 @@ typedef enum {
 #define kFastAppSwitchingEnabled @"fastAppSwitchingEnabled"
 #define kForceFastAppSwitching   @"forceFastAppSwitching"
 
+// by deVbug
+#define kEnableAtLaunchNativeOnly @"enableAtLaunchNativeOnly"
+#define kPersistentNativeOnly    @"persistentNativeOnly"
+
 
 // Former preference settings keys
 

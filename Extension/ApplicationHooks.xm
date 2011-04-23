@@ -154,7 +154,8 @@ static inline NSMutableArray *backgroundTasks()
     if (!isFirmware3x_) {
         // Firmware 4.x+
 
-        if (backgroundingEnabled_ || fallbackToNative_) {
+        // commented by deVbug
+        /*if (backgroundingEnabled_ || fallbackToNative_) {
             // Is Native method
             // NOTE: backgroundingEnabled_ will always be NO here for
             //       "Off" and "Backgrounder" methods.
@@ -180,7 +181,7 @@ static inline NSMutableArray *backgroundTasks()
             //       before this code is reached.
             UIApplicationFlags4x &_applicationFlags = MSHookIvar<UIApplicationFlags4x>(self, "_applicationFlags");
             _applicationFlags.taskSuspendingUnsupported = 1;
-        }
+        }*/
 
         // Call original implementation
         %orig;
@@ -231,7 +232,8 @@ static inline NSMutableArray *backgroundTasks()
                 _applicationFlags.forceExit = YES;
             } else {
                 // FIXME: Not certain if this is the best method for forcing termination.
-                [self terminateWithSuccess];
+                // commented by deVbug
+                //[self terminateWithSuccess];
             }
         }
     }

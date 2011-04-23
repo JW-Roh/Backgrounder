@@ -161,7 +161,7 @@ static BOOL isFirmware3x_ = NO;
 
 - (int)tableView:(UITableView *)tableView numberOfRowsInSection:(int)section
 {
-    static int rows[] = {4, 2, 1, 2, 2, 1};
+    static int rows[] = {4, 2, 1, 4, 2, 1};
 
     // Adjust section based on visibility of Native/Backgrounder options
     if (section > 1 || (section == 1 && !showNativeOptions))
@@ -190,7 +190,7 @@ static BOOL isFirmware3x_ = NO;
         {@"Off", @"Native", @"Backgrounder", @"Auto Detect"},
         {@"Fast App Switching", @"\u21b3 Even if Unsupported", nil, nil},
         {@"Fall Back to Native", nil, nil, nil},
-        {@"Enable at Launch", @"Stay Enabled", nil, nil},
+        {@"Enable at Launch", @"\u21b3 Native only", @"Stay Enabled", @"\u21b3 Native only"},
         {@"Badge", @"Status Bar Icon", nil, nil},
         {@"Minimize on Toggle", nil, nil, nil}
     };
@@ -199,7 +199,7 @@ static BOOL isFirmware3x_ = NO;
             @"Run as if in foreground", @"Native if supported, else Backgrounder"},
         {@"Keep apps paused in memory", @"Include apps not updated for iOS4", nil, nil},
         {@"If state disabled, use native method", nil, nil, nil},
-        {@"No need to manually enable", @"Must be disabled manually", nil, nil},
+        {@"No need to manually enable", @"Native app only backgrounding enable", @"Must be disabled manually", @"Native app only Stay Enabled"},
         {@"Mark the app's icon", @"Mark the app's status bar", nil, nil},
         {@"Minimize app when toggling state", nil, nil, nil}
     };
@@ -227,12 +227,12 @@ static BOOL isFirmware3x_ = NO;
         cell.imageView.image = [UIImage imageNamed:methodImages[indexPath.row]];
     } else {
         // Backgrounding indicators, Other
-        static NSString *keys[][2] = {
-            {kFastAppSwitchingEnabled, kForceFastAppSwitching},
-            {kFallbackToNative, nil},
-            {kEnableAtLaunch, kPersistent},
-            {kBadgeEnabled, kStatusBarIconEnabled},
-            {kMinimizeOnToggle, nil}};
+        static NSString *keys[][4] = {
+            {kFastAppSwitchingEnabled, kForceFastAppSwitching, nil, nil},
+            {kFallbackToNative, nil, nil, nil},
+            {kEnableAtLaunch, kEnableAtLaunchNativeOnly, kPersistent, kPersistentNativeOnly},
+            {kBadgeEnabled, kStatusBarIconEnabled, nil, nil},
+            {kMinimizeOnToggle, nil, nil, nil}};
 
         // Try to retrieve from the table view a now-unused cell with the given identifier
         cell = [tableView dequeueReusableCellWithIdentifier:reuseIdToggle];
@@ -346,7 +346,9 @@ static BOOL isFirmware3x_ = NO;
                 // NOTE: This is done so that, by default, app will behave the same
                 // as it would if Backgrounder were not installed.
                 [prefs setBool:YES forKey:kEnableAtLaunch forDisplayIdentifier:displayIdentifier];
+				[prefs setBool:NO forKey:kEnableAtLaunchNativeOnly forDisplayIdentifier:displayIdentifier];
                 [prefs setBool:YES forKey:kPersistent forDisplayIdentifier:displayIdentifier];
+				[prefs setBool:NO forKey:kPersistentNativeOnly forDisplayIdentifier:displayIdentifier];
             }
 
             // Determine which table sections to show/hide
@@ -426,12 +428,12 @@ static BOOL isFirmware3x_ = NO;
 
 - (void)buttonToggled:(UIButton *)button
 {
-    static NSString *keys[][2] = {
-        {kFastAppSwitchingEnabled, kForceFastAppSwitching},
-        {kFallbackToNative, nil},
-        {kEnableAtLaunch, kPersistent},
-        {kBadgeEnabled, kStatusBarIconEnabled},
-        {kMinimizeOnToggle, nil}};
+    static NSString *keys[][4] = {
+        {kFastAppSwitchingEnabled, kForceFastAppSwitching, nil, nil},
+        {kFallbackToNative, nil, nil, nil},
+        {kEnableAtLaunch, kEnableAtLaunchNativeOnly, kPersistent, kPersistentNativeOnly},
+        {kBadgeEnabled, kStatusBarIconEnabled, nil, nil},
+        {kMinimizeOnToggle, nil, nil, nil}};
 
     // Update selected state of button
     button.selected = !button.selected;

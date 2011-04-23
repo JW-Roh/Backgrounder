@@ -465,12 +465,6 @@ static BOOL shouldSuspend_ = NO;
         else
             // NOTE: Only used when invocation method is MenuHoldShort or LockHoldShort
             shouldSuspend_ = YES;
-        
-        // by deVbug
-        if (integerForKey(kBackgroundingMethod, identifier) == BGBackgroundingMethodNative) {
-            if (isEnabled && !autoSuspend)
-                [app performSelector:@selector(kill) withObject:nil afterDelay:0.7f];
-        }
     }
 }
 
@@ -637,18 +631,31 @@ static BOOL shouldSuspend_ = NO;
     NSInteger backgroundingMethod = integerForKey(kBackgroundingMethod, identifier);
     if (backgroundingMethod != BGBackgroundingMethodOff) {
         // NOTE: Display setting 0x2 is resume
+        // edited by deVbug
         if ([self displaySetting:0x2]) {
             // Was restored from backgrounded state
-            if (!boolForKey(kPersistent, identifier))
-                setBackgroundingEnabled(self, NO);
-            else if (boolForKey(kStatusBarIconEnabled, identifier))
+            if (!boolForKey(kPersistent, identifier)) {
+                if (!boolForKey(kPersistentNativeOnly, identifier) || 
+                    (boolForKey(kPersistentNativeOnly, identifier) && backgroundingMethod == BGBackgroundingMethodNative))
+                    setBackgroundingEnabled(self, NO);
+            } else {
+                if (boolForKey(kPersistentNativeOnly, identifier) && backgroundingMethod == BGBackgroundingMethodBackgrounder)
+                    setBackgroundingEnabled(self, NO);
+            }
+            if (boolForKey(kStatusBarIconEnabled, identifier))
                 // Must re-add the indicator on resume
                 updateStatusBarIndicatorForApplication(self);
         } else {
             // Initial launch; check if this application is set to background at launch
-            if (boolForKey(kEnableAtLaunch, identifier))
-                setBackgroundingEnabled(self, YES);
-            else if (boolForKey(kStatusBarIconEnabled, identifier))
+            if (boolForKey(kEnableAtLaunch, identifier)) {
+                if (!boolForKey(kEnableAtLaunchNativeOnly, identifier) || 
+                    (boolForKey(kEnableAtLaunchNativeOnly, identifier) && backgroundingMethod == BGBackgroundingMethodNative))
+                    setBackgroundingEnabled(self, YES);
+            } else {
+                if (boolForKey(kEnableAtLaunchNativeOnly, identifier) && backgroundingMethod == BGBackgroundingMethodBackgrounder)
+                    setBackgroundingEnabled(self, YES);
+            }
+            if (boolForKey(kStatusBarIconEnabled, identifier))
                 // Must add the initial indicator for "Fall Back to Native"
                 updateStatusBarIndicatorForApplication(self);
         }
@@ -732,6 +739,10 @@ static BOOL shouldSuspend_ = NO;
     if (!isEnabled && shouldFallback)
         setBadgeVisible(self, YES);
 #endif
+
+    // by deVbug
+    if (![enabledApps_ containsObject:identifier])
+        [self kill];
 }
 
 - (void)deactivated
