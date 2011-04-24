@@ -281,8 +281,10 @@ static void updateStatusBarIndicatorForApplication(SBApplication *app)
 
                 BOOL isEnabled = [enabledApps_ containsObject:displayId];
                 BOOL isBackgrounderMethod = (bgMethod == BGBackgroundingMethodBackgrounder);
-                if (isEnabled && isBackgrounderMethod) {
-                    imageName = @"Backgrounder";
+                // edited by deVbug
+                if (isBackgrounderMethod) {
+                    if (isEnabled)
+                        imageName = @"Backgrounder";
                 } else {
                     // FIXME: Find a better way to do this.
                     BOOL showNative = (isEnabled && !isBackgrounderMethod)
@@ -741,8 +743,7 @@ static BOOL shouldSuspend_ = NO;
 #endif
 
     // by deVbug
-    if (![enabledApps_ containsObject:identifier])
-        [self kill];
+    if (!isEnabled) [self kill];
 }
 
 - (void)deactivated
