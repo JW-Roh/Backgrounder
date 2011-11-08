@@ -1,0 +1,12 @@
+Package: me.devbug.backgrounderxforios5
+Name: BackgrounderX
+Version: 1:1.0.10
+Architecture: iphoneos-arm
+Description: Enable and manage backgrounding
+Maintainer: deVbug <devbug@devbug.me>
+Author: deVbug <devbug@devbug.me>
+Section: System
+Depends: mobilesubstrate, libactivator (>= 1.5.7), firmware (>= 5.0), libstatusbar
+Conflicts: backgrounder, me.devbug.backgroounder, sbsettings (<< 3.0.2-14), us.hannahpappah.incarcerapp (<= svn.r436-75)
+Replaces: backgrounder, me.devbug.backgrounder
+dev: ashikase

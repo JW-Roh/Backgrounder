@@ -1,0 +1,8 @@
+._*
+*.deb
+.debmake
+_
+obj
+fakeroot
+.theos
+.DS_Store

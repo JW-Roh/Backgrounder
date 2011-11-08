@@ -39,6 +39,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <UIKit/UIKit.h>
 
 @interface Application : UIApplication
 {
