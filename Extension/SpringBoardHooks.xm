@@ -1018,24 +1018,15 @@ static BOOL shouldAutoLaunch(NSString *identifier, BOOL initialCheck, BOOL origV
 void initSpringBoardHooks()
 {
     // Determine firmware version
-    Class $SBApplication = objc_getClass("SBApplication");
-    // FIXME: when device is booted, this code crash springboard.
-    /*isFirmware3x = (class_getInstanceMethod($SBApplication, @selector(pid)) != NULL);
-    isFirmwarePre42 = (class_getInstanceMethod($SBApplication, @selector(suspensionType)) == NULL);
-    isFirmware5x = (class_getInstanceMethod($SBApplication, @selector(webClip)) != NULL);*/
-    
-    // FIXME: I remembered this code crash springboard when iPad is booted
-    /*float version = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if (version >= 5.0 && version < 6.0) isFirmware5x = YES;
-    if (isFirmware5x == NO) return;*/
-    // FIXME: please
-    isFirmware5x = YES; isFirmware3x = isFirmwarePre42 = NO;
+	isFirmware3x = (kCFCoreFoundationVersionNumber <= 478.61);
+	isFirmwarePre42 = (kCFCoreFoundationVersionNumber < 550.52 && kCFCoreFoundationVersionNumber > 550.38);
+	isFirmware5x = (kCFCoreFoundationVersionNumber >= 675.00);
     
     %init;
 
     // Load firmware-specific hooks
     if (isFirmware3x) {
-        if (class_getInstanceMethod($SBApplication, @selector(_shouldAutoLaunchOnBoot:)) == NULL)
+        if (kCFCoreFoundationVersionNumber < 478.52 && kCFCoreFoundationVersionNumber >= 478.47)
             // Firmware < 3.1
             %init(GFirmware30x);
         else
