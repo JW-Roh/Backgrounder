@@ -224,49 +224,49 @@ static NSMutableArray *appsPermittedToRelaunch_ = nil;
 
 static void setBadgeVisible(SBApplication *app, BOOL visible)
 {
-	NSString *identifier = [app displayIdentifier];
+    NSString *identifier = [app displayIdentifier];
 
     // Update the app's SpringBoard icon to indicate if backgrounding is enabled
     SBIconModel *iconModel = [objc_getClass("SBIconModel") sharedInstance];
     SBApplicationIcon *icon = isFirmware3x ?
         [iconModel iconForDisplayIdentifier:identifier] : [iconModel leafIconForIdentifier:identifier];
-	
-	Class $SBIconViewMap = objc_getClass("SBIconViewMap");
-	SBIconView *iconView = [[$SBIconViewMap homescreenMap] iconViewForIcon:icon];
+    
+    Class $SBIconViewMap = objc_getClass("SBIconViewMap");
+    SBIconView *iconView = [[$SBIconViewMap homescreenMap] iconViewForIcon:icon];
 
     // Remove any existing badge
     // NOTE: Icon may already have a badge due to fall back to native option
-	if (!isFirmware5x)
-		[[icon viewWithTag:1000] removeFromSuperview];
-	else
-		[[iconView viewWithTag:1000] removeFromSuperview];
+    if (!isFirmware5x)
+        [[icon viewWithTag:1000] removeFromSuperview];
+    else
+        [[iconView viewWithTag:1000] removeFromSuperview];
 
     if (visible) {
         // Determine origin for badge based on icon image size
         // NOTE: Default icon image sizes: iPhone/iPod: 59x62, iPad: 74x76 
         CGPoint point;
-		
-		if (!isFirmware5x) {
-			Class $SBIcon = objc_getClass("SBIcon");
-			if ([$SBIcon respondsToSelector:@selector(defaultIconImageSize)]) {
-				// Determine position for badge (relative to lower left corner of icon)
-				CGSize size = [$SBIcon defaultIconImageSize];
-				point = CGPointMake(-12.0f, size.height - 23.0f);
-			} else {
-				// Fall back to hard-coded values (for firmware < 3.2, iPhone/iPod only)
-				point = CGPointMake(-12.0f, 39.0f);
-			}
-		} else {
-			Class $SBIconView = objc_getClass("SBIconView");
-			if ([$SBIconView respondsToSelector:@selector(defaultIconImageSize)]) {
-				// Determine position for badge (relative to lower left corner of icon)
-				CGSize size = [$SBIconView defaultIconImageSize];
-				point = CGPointMake(-12.0f, size.height - 23.0f);
-			} else {
-				// Fall back to hard-coded values (for firmware < 3.2, iPhone/iPod only)
-				point = CGPointMake(-12.0f, 39.0f);
-			}
-		}
+        
+        if (!isFirmware5x) {
+            Class $SBIcon = objc_getClass("SBIcon");
+            if ([$SBIcon respondsToSelector:@selector(defaultIconImageSize)]) {
+                // Determine position for badge (relative to lower left corner of icon)
+                CGSize size = [$SBIcon defaultIconImageSize];
+                point = CGPointMake(-12.0f, size.height - 23.0f);
+            } else {
+                // Fall back to hard-coded values (for firmware < 3.2, iPhone/iPod only)
+                point = CGPointMake(-12.0f, 39.0f);
+            }
+        } else {
+            Class $SBIconView = objc_getClass("SBIconView");
+            if ([$SBIconView respondsToSelector:@selector(defaultIconImageSize)]) {
+                // Determine position for badge (relative to lower left corner of icon)
+                CGSize size = [$SBIconView defaultIconImageSize];
+                point = CGPointMake(-12.0f, size.height - 23.0f);
+            } else {
+                // Fall back to hard-coded values (for firmware < 3.2, iPhone/iPod only)
+                point = CGPointMake(-12.0f, 39.0f);
+            }
+        }
 
         // Create and add badge
         BOOL isBackgrounderMethod = integerForKey(kBackgroundingMethod, identifier) == BGBackgroundingMethodBackgrounder
@@ -275,38 +275,38 @@ static void setBadgeVisible(SBApplication *app, BOOL visible)
         UIImageView *badgeView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:fileName]];
         badgeView.tag = 1000;
         badgeView.origin = point;
-		if (!isFirmware5x)
-			[icon addSubview:badgeView];
-		else
-			[iconView addSubview:badgeView];
+        if (!isFirmware5x)
+            [icon addSubview:badgeView];
+        else
+            [iconView addSubview:badgeView];
         [badgeView release];
     }
 }
 
 static void setBadgeVisible5(SBIconView *iconView, BOOL visible)
 {
-	SBApplication *app = [(SBApplicationIcon *)[iconView icon] application];
+    SBApplication *app = [(SBApplicationIcon *)[iconView icon] application];
     NSString *identifier = [app displayIdentifier];
-	
+    
     [[iconView viewWithTag:1000] removeFromSuperview];
-	
+    
     if (visible) {
         // Determine origin for badge based on icon image size
         // NOTE: Default icon image sizes: iPhone/iPod: 59x62, iPad: 74x76 
         CGPoint point;
-		
-		// Determine position for badge (relative to lower left corner of icon)
-		CGSize size = [objc_getClass("SBIconView") defaultIconImageSize];
-		point = CGPointMake(-12.0f, size.height - 23.0f);
-		
+        
+        // Determine position for badge (relative to lower left corner of icon)
+        CGSize size = [objc_getClass("SBIconView") defaultIconImageSize];
+        point = CGPointMake(-12.0f, size.height - 23.0f);
+        
         // Create and add badge
         BOOL isBackgrounderMethod = integerForKey(kBackgroundingMethod, identifier) == BGBackgroundingMethodBackgrounder
-			&& [enabledApps_ containsObject:identifier];
+            && [enabledApps_ containsObject:identifier];
         NSString *fileName = isBackgrounderMethod ? @"Backgrounder_Badge.png" : @"Backgrounder_NativeBadge.png";
         UIImageView *badgeView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:fileName]];
         badgeView.tag = 1000;
         badgeView.origin = point;
-		[iconView addSubview:badgeView];
+        [iconView addSubview:badgeView];
         [badgeView release];
     }
 }
@@ -628,13 +628,13 @@ static BOOL shouldSuspend_ = NO;
 
 // for iOS 5
 - (id)initWithBundleIdentifier:(id)bundleIdentifier webClip:(id)webClip path:(id)path bundle:(id)bundle 
-	infoDictionary:(id)dictionary isSystemApplication:(BOOL)application signerIdentity:(id)identity 
-	provisioningProfileValidated:(BOOL)validated
+    infoDictionary:(id)dictionary isSystemApplication:(BOOL)application signerIdentity:(id)identity 
+    provisioningProfileValidated:(BOOL)validated
 {
-	id ret = %orig;
-	
+    id ret = %orig;
+    
     NSString *displayId = [self displayIdentifier];
-	
+    
     // Check if app is set to exit on suspend
     BOOL exitsOnSuspend = NO;
     id value = [dictionary objectForKey:@"UIApplicationExitsOnSuspend"];
@@ -643,28 +643,28 @@ static BOOL shouldSuspend_ = NO;
         if (exitsOnSuspend && [self isSystemApplication])
             [appsExitingOnSuspend_ addObject:displayId];
     }
-	
-	// Check if app supports iOS multitasking
-	BOOL supportsMultitask = !exitsOnSuspend;
-	
-	// NOTE: App may have been built with 3.x SDK but still supports multitask;
-	//       check if app supports any of the allowed background modes.
-	//       (One known example is TomTom.)
-	if (!supportsMultitask) {
-		id value = [dictionary objectForKey:@"UIBackgroundModes"];
-		if ([value isKindOfClass:[NSArray class]]) {
-			NSArray *array = (NSArray *)value;
-			supportsMultitask = [array containsObject:@"audio"]
-			|| [array containsObject:@"location"]
-			|| [array containsObject:@"voip"]
-			|| [array containsObject:@"continuous"];
-		}
-	}
-	
-	if (supportsMultitask)
-		// App supports multitasking
-		[appsSupportingMultitask_ addObject:displayId];
-	
+    
+    // Check if app supports iOS multitasking
+    BOOL supportsMultitask = !exitsOnSuspend;
+    
+    // NOTE: App may have been built with 3.x SDK but still supports multitask;
+    //       check if app supports any of the allowed background modes.
+    //       (One known example is TomTom.)
+    if (!supportsMultitask) {
+        id value = [dictionary objectForKey:@"UIBackgroundModes"];
+        if ([value isKindOfClass:[NSArray class]]) {
+            NSArray *array = (NSArray *)value;
+            supportsMultitask = [array containsObject:@"audio"]
+            || [array containsObject:@"location"]
+            || [array containsObject:@"voip"]
+            || [array containsObject:@"continuous"];
+        }
+    }
+    
+    if (supportsMultitask)
+        // App supports multitasking
+        [appsSupportingMultitask_ addObject:displayId];
+    
     return ret;
 }
 
@@ -685,8 +685,8 @@ static BOOL shouldSuspend_ = NO;
         if (exitsOnSuspend && [self isSystemApplication])
             [appsExitingOnSuspend_ addObject:displayId];
     }
-	
-	NSLog(@"exitsOnSuspend %d", exitsOnSuspend);
+    
+    NSLog(@"exitsOnSuspend %d", exitsOnSuspend);
 
     if (!isFirmware3x) {
         // Check if app supports iOS multitasking
@@ -698,8 +698,8 @@ static BOOL shouldSuspend_ = NO;
             if ([(NSString *)value hasPrefix:@"iphoneos4"])
                 // App supports multitask if it does not exit on suspend
                 supportsMultitask = !exitsOnSuspend;
-		
-		NSLog(@"supportsMultitask %d", supportsMultitask);
+        
+        NSLog(@"supportsMultitask %d", supportsMultitask);
 
         // NOTE: App may have been built with 3.x SDK but still supports multitask;
         //       check if app supports any of the allowed background modes.
@@ -731,7 +731,7 @@ static BOOL shouldSuspend_ = NO;
     if (backgroundingMethod != BGBackgroundingMethodOff) {
         // NOTE: Display setting 0x2 is resume
         // edited by deVbug
-		BOOL displayFlag = isFirmware5x ? [self displayFlag:0x2] : [self displaySetting:0x2];
+        BOOL displayFlag = isFirmware5x ? [self displayFlag:0x2] : [self displaySetting:0x2];
         if (displayFlag) {
             // Was restored from backgrounded state
             if (!boolForKey(kPersistent, identifier)) {
@@ -804,10 +804,10 @@ static BOOL shouldSuspend_ = NO;
         // NOTE: Credit for this goes to phoenix3200 (author of Music Controls, http://phoenix-dev.com/)
         // NOTE: This prevents applicationSuspend: from being called.
         // FIXME: Run a trace on deactivate to determine why this works.
-		if (isFirmware5x)
-			flag = [self deactivationFlag:0x1];
-		else
-			flag = [self deactivationSetting:0x1];
+        if (isFirmware5x)
+            flag = [self deactivationFlag:0x1];
+        else
+            flag = [self deactivationSetting:0x1];
         [self setDeactivationSetting:0x1 flag:YES];
     }
 
@@ -845,7 +845,7 @@ static BOOL shouldSuspend_ = NO;
 
     // by deVbug
     if (!isEnabled && ![appsExitingOnSuspend_ containsObject:identifier])
-		[self kill];
+        [self kill];
 }
 
 - (void)deactivated
@@ -857,12 +857,12 @@ static BOOL shouldSuspend_ = NO;
         // GUI will get "stuck" and will no longer respond to the home button.
         // Prevent this by hiding the app's context view upon deactivation.
         // NOTE: Credit for this one also goes to phoenix3200
-		if (!isFirmware5x)
-			[[self contextHostView] setHidden:YES];
-		else {
-			UIView *contextHostView = MSHookIvar<UIView *>([self contextHostManager], "_contextHostView");
-			[contextHostView setHidden:YES];
-		}
+        if (!isFirmware5x)
+            [[self contextHostView] setHidden:YES];
+        else {
+            UIView *contextHostView = MSHookIvar<UIView *>([self contextHostManager], "_contextHostView");
+            [contextHostView setHidden:YES];
+        }
 }
 
 // NOTE: Observed types:
@@ -907,7 +907,6 @@ static BOOL shouldSuspend_ = NO;
 
 %hook SBApplication
 
-// no iOS 5
 - (void)_relaunchAfterAbnormalExit:(BOOL)exitedAbnormally
 {
     // NOTE: This method gets called by both exitedNormally and exitedAbnormally
@@ -993,22 +992,20 @@ static BOOL shouldAutoLaunch(NSString *identifier, BOOL initialCheck, BOOL origV
 %hook SBIconView
 
 - (id)iconImageView {
-	UIView *view = (UIView *)%orig;
-	
-	[[self viewWithTag:1000] removeFromSuperview];
-	
-	if ([[self icon] isKindOfClass:[objc_getClass("SBApplicationIcon") class]]) {
-		SBApplication *application = [((SBApplicationIcon *)[self icon]) application];
-		BOOL isRunning = [[application process] isRunning];
-		
-		// location 
-		// 0 : homescreen
-		// 2 : appswitcher
-		if ([self location] == 0)
-			setBadgeVisible5(self, isRunning);
-	}
-	
-	return view;
+    [[self viewWithTag:1000] removeFromSuperview];
+    
+    if ([[self icon] isKindOfClass:[objc_getClass("SBApplicationIcon") class]]) {
+        SBApplication *application = [((SBApplicationIcon *)[self icon]) application];
+        BOOL isRunning = [[application process] isRunning];
+        
+        // location 
+        // 0 : homescreen
+        // 2 : appswitcher
+        if ([self location] == 0)
+            setBadgeVisible5(self, isRunning);
+    }
+    
+    return %orig;
 }
 
 %end
@@ -1022,11 +1019,19 @@ void initSpringBoardHooks()
 {
     // Determine firmware version
     Class $SBApplication = objc_getClass("SBApplication");
-    isFirmware3x = (class_getInstanceMethod($SBApplication, @selector(pid)) != NULL);
+    // FIXME: when device is booted, this code crash springboard.
+    /*isFirmware3x = (class_getInstanceMethod($SBApplication, @selector(pid)) != NULL);
     isFirmwarePre42 = (class_getInstanceMethod($SBApplication, @selector(suspensionType)) == NULL);
-	isFirmware5x = (class_getInstanceMethod($SBApplication, @selector(notifyResumeActive)) != NULL);
-	
-	%init;
+    isFirmware5x = (class_getInstanceMethod($SBApplication, @selector(webClip)) != NULL);*/
+    
+    // FIXME: I remembered this code crash springboard when iPad is booted
+    /*float version = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if (version >= 5.0 && version < 6.0) isFirmware5x = YES;
+    if (isFirmware5x == NO) return;*/
+    // FIXME: please
+    isFirmware5x = YES; isFirmware3x = isFirmwarePre42 = NO;
+    
+    %init;
 
     // Load firmware-specific hooks
     if (isFirmware3x) {
@@ -1036,11 +1041,12 @@ void initSpringBoardHooks()
         else
             // Firmware 3.1 - 3.2
             %init(GFirmware31x);
-    } else if (isFirmware5x) {
-		%init(GFirmware5x);
-	} else {
-        // Firmware >= 4.0
+    } else {
+        // Firmware == 4.x
         %init(GFirmware4x);
+        
+        if (isFirmware5x)
+            %init(GFirmware5x);
     }
 
     // Initialize simple notification popup
