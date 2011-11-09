@@ -1001,7 +1001,7 @@ static BOOL shouldAutoLaunch(NSString *identifier, BOOL initialCheck, BOOL origV
         // location 
         // 0 : homescreen
         // 2 : appswitcher
-        if ([self location] == 0)
+        if ([self location] == 0 && boolForKey(kBadgeEnabled, [application displayIdentifier]))
             setBadgeVisible5(self, isRunning);
     }
     
