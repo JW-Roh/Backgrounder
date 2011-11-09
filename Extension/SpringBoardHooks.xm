@@ -860,7 +860,7 @@ static BOOL shouldSuspend_ = NO;
         if (!isFirmware5x)
             [[self contextHostView] setHidden:YES];
         else {
-            UIView *contextHostView = MSHookIvar<UIView *>([self contextHostManager], "_contextHostView");
+            UIView *contextHostView = [self contextHostViewForRequester:self];
             [contextHostView setHidden:YES];
         }
 }

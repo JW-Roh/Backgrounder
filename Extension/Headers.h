@@ -282,6 +282,9 @@ typedef struct {
 @interface SBApplication (Firmware42x)
 - (int)suspensionType;
 @end
+@interface SBApplication (Firmware5x)
+- (id)contextHostViewForRequester:(id)fp8;
+@end
 
 @interface SBDisplayStack : NSObject
 - (BOOL)containsDisplay:(id)display;
