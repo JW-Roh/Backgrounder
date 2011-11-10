@@ -824,6 +824,9 @@ static BOOL shouldSuspend_ = NO;
         setBadgeVisible(self, YES);
 //#endif
 
+    //SBUIController *uiController = [objc_getClass("SBUIController") sharedInstance];
+    //NSLog(@"[bbbbgggg] subviews: %@", [[uiController window] subviews]);
+
     // by deVbug
     if (!isEnabled && ![appsExitingOnSuspend_ containsObject:identifier] &&
         (isBackgrounderMethod && !(boolForKey(kFallbackToNative, identifier)) || 
@@ -843,7 +846,7 @@ static BOOL shouldSuspend_ = NO;
         if (!isFirmware5x)
             [[self contextHostView] setHidden:YES];
         else {
-            UIView *contextHostView = [self contextHostViewForRequester:self];
+            UIView *contextHostView = [self contextHostViewForRequester:@"LaunchSuspend"];
             [contextHostView setHidden:YES];
         }
 }
