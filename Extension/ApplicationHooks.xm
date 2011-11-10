@@ -155,8 +155,7 @@ static inline NSMutableArray *backgroundTasks()
     if (!isFirmware3x_) {
         // Firmware 4.x+
 
-        // commented by deVbug
-        /*if (backgroundingEnabled_ || fallbackToNative_) {
+        if (backgroundingEnabled_ || fallbackToNative_) {
             // Is Native method
             // NOTE: backgroundingEnabled_ will always be NO here for
             //       "Off" and "Backgrounder" methods.
@@ -166,8 +165,12 @@ static inline NSMutableArray *backgroundTasks()
                 // Fast app switching is disabled, and app does not support audio/gps/voip
                 if ([backgroundTasks() count] == 0) {
                     // No outstanding background tasks; safe to terminate
-                    UIApplicationFlags4x &_applicationFlags = MSHookIvar<UIApplicationFlags4x>(self, "_applicationFlags");
-                    _applicationFlags.taskSuspendingUnsupported = 1;
+                    UIApplicationFlags4x &_applicationFlags4x = MSHookIvar<UIApplicationFlags4x>(self, "_applicationFlags");
+                    UIApplicationFlags5x &_applicationFlags5x = MSHookIvar<UIApplicationFlags5x>(self, "_applicationFlags");
+                    if (isFirmware5x_)
+                        _applicationFlags5x.taskSuspendingUnsupported = 1;
+                    else
+                        _applicationFlags4x.taskSuspendingUnsupported = 1;
                 }
             }
         } else {
@@ -180,9 +183,13 @@ static inline NSMutableArray *backgroundTasks()
             // Application should terminate on suspend; make certain that it does
             // NOTE: If there were any remaining tasks, the app will terminate
             //       before this code is reached.
-            UIApplicationFlags4x &_applicationFlags = MSHookIvar<UIApplicationFlags4x>(self, "_applicationFlags");
-            _applicationFlags.taskSuspendingUnsupported = 1;
-        }*/
+            UIApplicationFlags4x &_applicationFlags4x = MSHookIvar<UIApplicationFlags4x>(self, "_applicationFlags");
+            UIApplicationFlags5x &_applicationFlags5x = MSHookIvar<UIApplicationFlags5x>(self, "_applicationFlags");
+            if (isFirmware5x_)
+                _applicationFlags5x.taskSuspendingUnsupported = 1;
+            else
+                _applicationFlags4x.taskSuspendingUnsupported = 1;
+        }
 
         // Call original implementation
         %orig;

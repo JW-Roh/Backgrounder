@@ -332,10 +332,8 @@ static void updateStatusBarIndicatorForApplication(SBApplication *app)
 
                 BOOL isEnabled = [enabledApps_ containsObject:displayId];
                 BOOL isBackgrounderMethod = (bgMethod == BGBackgroundingMethodBackgrounder);
-                // edited by deVbug
-                if (isBackgrounderMethod) {
-                    if (isEnabled)
-                        imageName = @"Backgrounder";
+                if (isEnabled && isBackgrounderMethod) {
+                    imageName = @"Backgrounder";
                 } else {
                     // FIXME: Find a better way to do this.
                     BOOL showNative = (isEnabled && !isBackgrounderMethod)
@@ -685,8 +683,6 @@ static BOOL shouldSuspend_ = NO;
         if (exitsOnSuspend && [self isSystemApplication])
             [appsExitingOnSuspend_ addObject:displayId];
     }
-    
-    NSLog(@"exitsOnSuspend %d", exitsOnSuspend);
 
     if (!isFirmware3x) {
         // Check if app supports iOS multitasking
@@ -698,8 +694,6 @@ static BOOL shouldSuspend_ = NO;
             if ([(NSString *)value hasPrefix:@"iphoneos4"])
                 // App supports multitask if it does not exit on suspend
                 supportsMultitask = !exitsOnSuspend;
-        
-        NSLog(@"supportsMultitask %d", supportsMultitask);
 
         // NOTE: App may have been built with 3.x SDK but still supports multitask;
         //       check if app supports any of the allowed background modes.
@@ -730,32 +724,19 @@ static BOOL shouldSuspend_ = NO;
     NSInteger backgroundingMethod = integerForKey(kBackgroundingMethod, identifier);
     if (backgroundingMethod != BGBackgroundingMethodOff) {
         // NOTE: Display setting 0x2 is resume
-        // edited by deVbug
         BOOL displayFlag = isFirmware5x ? [self displayFlag:0x2] : [self displaySetting:0x2];
         if (displayFlag) {
             // Was restored from backgrounded state
-            if (!boolForKey(kPersistent, identifier)) {
-                if (!boolForKey(kPersistentNativeOnly, identifier) || 
-                    (boolForKey(kPersistentNativeOnly, identifier) && backgroundingMethod == BGBackgroundingMethodNative))
-                    setBackgroundingEnabled(self, NO);
-            } else {
-                if (boolForKey(kPersistentNativeOnly, identifier) && backgroundingMethod == BGBackgroundingMethodBackgrounder)
-                    setBackgroundingEnabled(self, NO);
-            }
-            if (boolForKey(kStatusBarIconEnabled, identifier))
+            if (!boolForKey(kPersistent, identifier))
+                setBackgroundingEnabled(self, NO);
+            else if (boolForKey(kStatusBarIconEnabled, identifier))
                 // Must re-add the indicator on resume
                 updateStatusBarIndicatorForApplication(self);
         } else {
             // Initial launch; check if this application is set to background at launch
-            if (boolForKey(kEnableAtLaunch, identifier)) {
-                if (!boolForKey(kEnableAtLaunchNativeOnly, identifier) || 
-                    (boolForKey(kEnableAtLaunchNativeOnly, identifier) && backgroundingMethod == BGBackgroundingMethodNative))
-                    setBackgroundingEnabled(self, YES);
-            } else {
-                if (boolForKey(kEnableAtLaunchNativeOnly, identifier) && backgroundingMethod == BGBackgroundingMethodBackgrounder)
-                    setBackgroundingEnabled(self, YES);
-            }
-            if (boolForKey(kStatusBarIconEnabled, identifier))
+            if (boolForKey(kEnableAtLaunch, identifier))
+                setBackgroundingEnabled(self, YES);
+            else if (boolForKey(kStatusBarIconEnabled, identifier))
                 // Must add the initial indicator for "Fall Back to Native"
                 updateStatusBarIndicatorForApplication(self);
         }
@@ -834,17 +815,19 @@ static BOOL shouldSuspend_ = NO;
         // NOTE: This is the continuation of phoenix3200's fix
         [self setDeactivationSetting:0x1 flag:flag];
 
-#ifdef FALLBACK_INDICATORS
+//#ifdef FALLBACK_INDICATORS
     // NOTE: For apps set to fall back to native, the native badge will not be
     //       displayed until the backgrounding state of the app has been toggled
     //       on and off. This workaround ensures that a native badge is added.
     // FIXME: Find a better way to do this.
     if (!isEnabled && shouldFallback)
         setBadgeVisible(self, YES);
-#endif
+//#endif
 
     // by deVbug
-    if (!isEnabled && ![appsExitingOnSuspend_ containsObject:identifier])
+    if (!isEnabled && ![appsExitingOnSuspend_ containsObject:identifier] &&
+        (isBackgrounderMethod && !(boolForKey(kFallbackToNative, identifier)) || 
+        (integerForKey(kBackgroundingMethod, identifier) == BGBackgroundingMethodNative)))
         [self kill];
 }
 
@@ -1018,9 +1001,9 @@ static BOOL shouldAutoLaunch(NSString *identifier, BOOL initialCheck, BOOL origV
 void initSpringBoardHooks()
 {
     // Determine firmware version
-	isFirmware3x = (kCFCoreFoundationVersionNumber <= 478.61);
-	isFirmwarePre42 = (kCFCoreFoundationVersionNumber < 550.52 && kCFCoreFoundationVersionNumber > 550.38);
-	isFirmware5x = (kCFCoreFoundationVersionNumber >= 675.00);
+    isFirmware3x = (kCFCoreFoundationVersionNumber <= 478.61);
+    isFirmwarePre42 = (kCFCoreFoundationVersionNumber < 550.52 && kCFCoreFoundationVersionNumber > 550.38);
+    isFirmware5x = (kCFCoreFoundationVersionNumber >= 675.00);
     
     %init;
 

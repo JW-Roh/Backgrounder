@@ -252,7 +252,8 @@ typedef struct {
 - (BOOL)displaySetting:(unsigned)setting;                                    // ~Firmware 4
 - (BOOL)displayFlag:(unsigned int)setting;                                   // Firmware 5~
 - (void)setDeactivationSetting:(unsigned)setting flag:(BOOL)flag;
-- (void)kill;                                                                // by deVbug
+- (void)setDeactivationSetting:(unsigned int)setting value:(id)value;        // Firmware 4~
+- (void)kill;
 @end
 @interface SBApplication : SBDisplay
 - (void)_cancelAutoRelaunch;
