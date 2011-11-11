@@ -241,7 +241,7 @@ static void setBadgeVisible(SBApplication *app, BOOL visible)
     else
         [[iconView viewWithTag:1000] removeFromSuperview];
 
-    if (visible) {
+    if (visible && boolForKey(kBadgeEnabled, identifier)) {
         // Determine origin for badge based on icon image size
         // NOTE: Default icon image sizes: iPhone/iPod: 59x62, iPad: 74x76 
         CGPoint point;
@@ -290,7 +290,7 @@ static void setBadgeVisible5(SBIconView *iconView, BOOL visible)
     
     [[iconView viewWithTag:1000] removeFromSuperview];
     
-    if (visible) {
+    if (visible && boolForKey(kBadgeEnabled, identifier)) {
         // Determine origin for badge based on icon image size
         // NOTE: Default icon image sizes: iPhone/iPod: 59x62, iPad: 74x76 
         CGPoint point;
@@ -820,12 +820,9 @@ static BOOL shouldSuspend_ = NO;
     //       displayed until the backgrounding state of the app has been toggled
     //       on and off. This workaround ensures that a native badge is added.
     // FIXME: Find a better way to do this.
-    if (!isEnabled && shouldFallback)
+    if (!isEnabled && shouldFallback && boolForKey(kBadgeEnabled, identifier))
         setBadgeVisible(self, YES);
 //#endif
-
-    //SBUIController *uiController = [objc_getClass("SBUIController") sharedInstance];
-    //NSLog(@"[bbbbgggg] subviews: %@", [[uiController window] subviews]);
 
     // by deVbug
     if (!isEnabled && ![appsExitingOnSuspend_ containsObject:identifier] &&
