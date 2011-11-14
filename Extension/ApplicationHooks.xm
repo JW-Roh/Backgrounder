@@ -490,11 +490,9 @@ static void toggleBackgrounding(int signal)
     
     // NOTE: Application class may be a subclass of UIApplication (and not UIApplication itself)
     Class $UIApplication = [self class];
-    if (!isFirmware5x_) {
-        %init(GMethodAll, UIApplication = $UIApplication);
-        if ([self respondsToSelector:@selector(applicationSuspend:settings:)])
-            %init(GMethodAll_SuspendSettings, UIApplication = $UIApplication);
-    }
+	%init(GMethodAll, UIApplication = $UIApplication);
+	if ([self respondsToSelector:@selector(applicationSuspend:settings:)])
+		%init(GMethodAll_SuspendSettings, UIApplication = $UIApplication);
         
     if (backgroundingMethod_ == BGBackgroundingMethodBackgrounder) {
         %init(GMethodBackgrounder, UIApplication = $UIApplication);

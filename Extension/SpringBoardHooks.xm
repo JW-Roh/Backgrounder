@@ -57,7 +57,6 @@ extern "C" {
 }
 
 static BOOL isFirmware3x = NO;
-static BOOL isFirmwarePre42 = NO;
 static BOOL isFirmware5x = NO;
 
 static NSMutableArray *appsExitingOnSuspend_ = nil;
@@ -797,7 +796,10 @@ static BOOL shouldSuspend_ = NO;
     int suspendType = 0;
     if (shouldQuit) {
         // App should quit
-        suspendType = isFirmwarePre42 ? [self _suspensionType] : [self suspensionType];
+		if ([self respondsToSelector:@selector(_suspensionType)])
+			suspendType = [self _suspensionType];
+		else
+			suspendType = [self suspensionType];
         [self setSuspendType:0];
     }
 
@@ -1002,7 +1004,6 @@ void initSpringBoardHooks()
 {
     // Determine firmware version
     isFirmware3x = (kCFCoreFoundationVersionNumber <= 478.61);
-    isFirmwarePre42 = (kCFCoreFoundationVersionNumber < 550.52 && kCFCoreFoundationVersionNumber > 550.38);
     isFirmware5x = (kCFCoreFoundationVersionNumber >= 675.00);
     
     %init;
