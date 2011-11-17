@@ -245,7 +245,7 @@ static inline NSMutableArray *backgroundTasks()
                 _applicationFlags.forceExit = YES;
             } else {
                 // FIXME: Not certain if this is the best method for forcing termination.
-                // NOTE for fix what has sended kill signal to exited native multitasking app by Backgrounder
+                // NOTE: for fix what has sended kill signal to exited native multitasking app by Backgrounder
                 //[self terminateWithSuccess];
             }
         }
@@ -455,13 +455,6 @@ static void setup(UIApplication *self)
                 // NOTE: Only need to modify flag if "force" option is set;
                 //       apps updated for iOS4 will already have the flag set to zero.
                 if (forceFastAppSwitching_) {
-                    // Determine if native multitasking is purposely disabled
-                    /*BOOL exitsOnSuspend = NO;
-                    NSBundle *bundle = [NSBundle mainBundle];
-                    id value = [bundle objectForInfoDictionaryKey:@"UIApplicationExitsOnSuspend"]; 
-                    if ([value isKindOfClass:[NSNumber class]])
-                        exitsOnSuspend = [(NSNumber *)value boolValue];*/
-
                     // NOTE: Respect UIApplicationExitsOnSuspend flag
                     if (isFirmware4x_) {
                         UIApplicationFlags4x &_applicationFlags = MSHookIvar<UIApplicationFlags4x>(self, "_applicationFlags");

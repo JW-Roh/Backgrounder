@@ -272,7 +272,7 @@ static void setBadgeVisible5(SBIconView *iconView, BOOL visible)
     
     [[iconView viewWithTag:1000] removeFromSuperview];
     
-    if (visible && boolForKey(kBadgeEnabled, identifier)) {
+    if (visible) {
         // Determine origin for badge based on icon image size
         // NOTE: Default icon image sizes: iPhone/iPod: 59x62, iPad: 74x76 
         CGPoint point;
@@ -283,7 +283,7 @@ static void setBadgeVisible5(SBIconView *iconView, BOOL visible)
         
         // Create and add badge
         BOOL isBackgrounderMethod = integerForKey(kBackgroundingMethod, identifier) == BGBackgroundingMethodBackgrounder
-                                                  && [enabledApps_ containsObject:identifier];
+            && [enabledApps_ containsObject:identifier];
         NSString *fileName = isBackgrounderMethod ? @"Backgrounder_Badge.png" : @"Backgrounder_NativeBadge.png";
         UIImageView *badgeView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:fileName]];
         badgeView.tag = 1000;
@@ -770,7 +770,7 @@ static inline void determineMultitaskingSupport(SBApplication *self, NSDictionar
     //       displayed until the backgrounding state of the app has been toggled
     //       on and off. This workaround ensures that a native badge is added.
     // FIXME: Find a better way to do this.
-    if (!isEnabled && shouldFallback)
+    if (!isEnabled && shouldFallback && boolForKey(kBadgeEnabled, identifier))
         setBadgeVisible(self, YES);
 #endif
     
