@@ -775,6 +775,7 @@ static inline void determineMultitaskingSupport(SBApplication *self, NSDictionar
 #endif
     
     // NOTE: for fix what has sended kill signal to exited native multitasking app by Backgrounder
+    // FIXME: this code causes abnormal exit
     if (!isEnabled && ![appsExitingOnSuspend_ containsObject:identifier] &&
         (isBackgrounderMethod && !(boolForKey(kFallbackToNative, identifier)) || 
         (integerForKey(kBackgroundingMethod, identifier) == BGBackgroundingMethodNative)))
