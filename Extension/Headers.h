@@ -263,6 +263,8 @@ typedef struct {
 - (void)_cancelAutoRelaunch;
 - (id)displayIdentifier;
 - (BOOL)isSystemApplication;
+- (unsigned int)applicationState;
+- (unsigned int)cachedApplicationState;
 @end
 @interface SBApplication (Firmware3x)
 @property(assign) int pid;

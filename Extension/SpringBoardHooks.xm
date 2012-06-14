@@ -775,10 +775,10 @@ static inline void determineMultitaskingSupport(SBApplication *self, NSDictionar
 #endif
     
     // NOTE: for fix what has sended kill signal to exited native multitasking app by Backgrounder
+    // applicationState == 6 => sleep
     // FIXME: this code causes abnormal exit
     if (!isEnabled && ![appsExitingOnSuspend_ containsObject:identifier] &&
-        (isBackgrounderMethod && !(boolForKey(kFallbackToNative, identifier)) || 
-        (integerForKey(kBackgroundingMethod, identifier) == BGBackgroundingMethodNative)))
+        (isBackgrounderMethod && !boolForKey(kFallbackToNative, identifier) && [self applicationState] != 6))
         [self kill];
 }
 
@@ -791,7 +791,9 @@ static inline void determineMultitaskingSupport(SBApplication *self, NSDictionar
         // GUI will get "stuck" and will no longer respond to the home button.
         // Prevent this by hiding the app's context view upon deactivation.
         // NOTE: Credit for this one also goes to phoenix3200
-        id contextHostView = isFirmware5x ? [self contextHostViewForRequester:@"LaunchSuspend"] : [self contextHostView];
+        //
+        // LaunchSuspend, SwitchApp, Showcase, MetaHosting...
+        id contextHostView = isFirmware5x ? [self contextHostViewForRequester:@"default"] : [self contextHostView];
         [contextHostView setHidden:YES];
     }
 }
