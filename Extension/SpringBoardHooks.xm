@@ -793,7 +793,7 @@ static inline void determineMultitaskingSupport(SBApplication *self, NSDictionar
         // NOTE: Credit for this one also goes to phoenix3200
         //
         // LaunchSuspend, SwitchApp, Showcase, MetaHosting...
-        id contextHostView = isFirmware5x ? [self contextHostViewForRequester:@"default"] : [self contextHostView];
+        id contextHostView = isFirmware5x ? [self contextHostViewForRequester:@"LaunchSuspend"] : [self contextHostView];
         [contextHostView setHidden:YES];
     }
 }
