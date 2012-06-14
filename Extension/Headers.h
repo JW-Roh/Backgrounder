@@ -288,6 +288,9 @@ typedef struct {
 @end
 @interface SBApplication (Firmware5x)
 - (id)contextHostViewForRequester:(id)requester;
+- (void)disableContextHostingForRequester:(id)fp8;
+- (id)contextHostManager;
+- (void)hideContextHostViewForRequester:(id)fp8;
 @end
 
 @interface SBDisplayStack : NSObject

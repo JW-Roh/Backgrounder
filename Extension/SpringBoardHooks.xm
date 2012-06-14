@@ -85,7 +85,7 @@ static void loadPreferences()
     //       until after SBPlatformController is initialized, which happens in
     //       applicationDidFinishLaunching:.
     NSDictionary *defaults = [NSDictionary dictionaryWithContentsOfFile:
-        @"/Applications/Backgrounder.app/Defaults.plist"];
+        @"/Applications/TrueMultitasking.app/Defaults.plist"];
 
     // Try reading user's global preference settings
     CFPropertyListRef propList = CFPreferencesCopyAppValue((CFStringRef)kGlobal, appId);
@@ -147,7 +147,7 @@ static id objectForKey(NSString *key, NSString *displayId)
     if (value == nil) {
         // Key may not have existed in previous version; check default global values
         NSDictionary *defaults = [NSDictionary dictionaryWithContentsOfFile:
-            @"/Applications/Backgrounder.app/Defaults.plist"];
+            @"/Applications/TrueMultitasking.app/Defaults.plist"];
         value = [[defaults objectForKey:kGlobal] objectForKey:key];
     }
 

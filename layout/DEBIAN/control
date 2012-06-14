@@ -1,8 +1,7 @@
 Package: me.devbug.backgrounderxforios5
-Name: BackgrounderX
+Name: TrueMultitasking
 Version: 1:1.0.10
 Architecture: iphoneos-arm
-Description: Enable and manage backgrounding
 Homepage: https://github.com/devbug/Backgrounder
 Maintainer: deVbug <devbug@devbug.me>
 Author: deVbug <devbug@devbug.me>
@@ -11,3 +10,6 @@ Depends: mobilesubstrate, libactivator (>= 1.3.1), firmware (>= 3.0), firmware (
 Conflicts: backgrounder, me.devbug.backgroounder, sbsettings (<< 3.0.2-14), us.hannahpappah.incarcerapp (<= svn.r436-75)
 Replaces: backgrounder, me.devbug.backgrounder
 dev: ashikase
+Description: Enable and manage backgrounding
+ This package's old name is BackgrounderX.
+ This package is porting of Backgrounder for iOS 5

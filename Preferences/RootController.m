@@ -61,7 +61,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        self.title = @"Backgrounder";
+        self.title = @"TrueMultitasking";
         self.navigationItem.backBarButtonItem = [[[UIBarButtonItem alloc] initWithTitle:@"Back"
             style:UIBarButtonItemStyleBordered target:nil action:nil] autorelease];
         self.navigationItem.rightBarButtonItem = [[[UIBarButtonItem alloc]
@@ -111,15 +111,18 @@
 
     // Author label
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
-    [label setText:@"by Lance Fetters (ashikase)"];
+	[label setNumberOfLines:0];
+	[label setLineBreakMode:UILineBreakModeWordWrap];
+	[label setTextAlignment:UITextAlignmentCenter];
+    [label setText:@"original Backgounder\nby Lance Fetters (ashikase)\n\nTrueMultitasking by deVbug"];
     [label setTextColor:[UIColor colorWithRed:0.3f green:0.34f blue:0.42f alpha:1.0f]];
     [label setShadowColor:[UIColor whiteColor]];
     [label setShadowOffset:CGSizeMake(1, 1)];
     [label setBackgroundColor:[UIColor clearColor]];
     [label setFont:[UIFont systemFontOfSize:16.0f]];
     CGSize size = [label.text sizeWithFont:label.font];
-    [label setFrame:CGRectMake((appFrame.size.width - size.width) / 2.0f, view.bounds.size.height - donationHeight - size.height - 12.0f,
-            size.width, size.height)];
+    [label setFrame:CGRectMake((appFrame.size.width - size.width) / 2.0f, view.bounds.size.height - donationHeight - (size.height*5) - 12.0f,
+            size.width, size.height*5)];
     [view addSubview:label];
     [label release];
 

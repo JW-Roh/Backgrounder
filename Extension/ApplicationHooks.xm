@@ -69,7 +69,7 @@ static void loadPreferences()
     //       A symlink to the preferences file is stored in /var/mobile,
     //       which *can* be accessed.
     NSDictionary *defaults = [NSDictionary dictionaryWithContentsOfFile:
-        @"/var/mobile/Library/Preferences/jp.ashikase.backgrounder.plist"];
+        @"/var/mobile/Library/Preferences/me.devbug.backgrounderxforios5.plist"];
 
     NSDictionary *prefs = [[defaults objectForKey:kOverrides] objectForKey:displayId];
     if (prefs == nil)

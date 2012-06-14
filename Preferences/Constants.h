@@ -41,12 +41,12 @@
 
 
 // General
-#define APP_TITLE "Backgrounder"
+#define APP_TITLE "TrueMultitasking"
 #define FIRST_RUN_MSG "WARNING: Any changes made to preferences will cause SpringBoard to restart upon exit."
 
 // Documentation
 #define DOC_BUNDLE_PATH "doc"
 
-#define DEVSITE_URL "http://github.com/ashikase/Backgrounder/"
+#define DEVSITE_URL "http://github.com/devbug/Backgrounder/"
 
 /* vim: set filetype=objcpp sw=4 ts=4 sts=4 expandtab textwidth=80 ff=unix: */

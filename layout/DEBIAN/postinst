@@ -1,6 +1,5 @@
 #!/bin/sh
 
-if [ -f "/var/mobile/Library/Preferences/jp.ashikase.backgrounder.plist" ]; then
-    # Run updater application to convert old settings to new per-app format
-    /bin/su -l mobile -c /Applications/Backgrounder.app/Updater
+if [ -f "/var/mobile/Library/Preferences/jp.ashikase.backgrounder.plist" -a ! -f "/var/mobile/Library/Preferences/me.devbug.backgrounderxforios5.plist" ]; then
+    /bin/su -l mobile -c "cp /var/mobile/Library/Preferences/jp.ashikase.backgrounder.plist /var/mobile/Library/Preferences/me.devbug.backgrounderxforios5.plist"
 fi

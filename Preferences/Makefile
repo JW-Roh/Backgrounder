@@ -1,7 +1,7 @@
 APPLICATION_NAME = Preferences
-APP_ID = jp.ashikase.backgrounder
+APP_ID = me.devbug.backgrounderxforios5
 
-Preferences_BUNDLE_NAME = Backgrounder
+Preferences_BUNDLE_NAME = TrueMultitasking
 Preferences_OBJC_FILES = main.m \
 						 ApplicationCell.m \
 						 ApplicationPickerController.m \

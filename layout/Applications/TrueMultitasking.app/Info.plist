@@ -9,7 +9,7 @@
 	<string>Preferences</string>
 
 	<key>CFBundleIdentifier</key>
-	<string>jp.ashikase.backgrounder</string>
+	<string>me.devbug.backgrounderxforios5</string>
 
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
